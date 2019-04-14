@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS medical_desert_db;
 CREATE DATABASE medical_desert_db;
 
 USE medical_desert_db;
@@ -15,7 +16,7 @@ CREATE TABLE hpsa (
   latitude DOUBLE,
   primary key(id)
 );
--- SELECT * FROM hpsa;
+-- SELECT county_name FROM hpsa;
 -- DESCRIBE hpsa;
 
 DROP TABLE IF EXISTS uninsured;
@@ -29,11 +30,37 @@ CREATE TABLE uninsured (
 );
 -- SELECT * FROM uninsured;
 -- DESCRIBE uninsured;
-
+-- select county_name from uninsured;
 -- merge tables
 /*
-SELECT h.county_name,h.longitude, h.latitude, u.total_population, u.total_uninsured_population
+SELECT h.hpsa_name, h.county_name,h.longitude, h.latitude, u.total_population, u.total_uninsured_population
 FROM hpsa AS h
 JOIN uninsured AS u
 ON h.county_name = u.county_name;
 */
+
+DROP TABLE IF EXISTS uninsured_rate;
+CREATE TABLE uninsured_rate (
+  id INT AUTO_INCREMENT NOT NULL,
+  NAME TEXT,
+  uninsured_rate DOUBLE,
+  primary key(id)
+);
+-- Select NAME,  uninsured_rate from uninsured_rate;
+-- find duplicates
+/*
+SELECT 
+    NAME, COUNT(NAME)
+FROM
+    uninsured_rate
+GROUP BY 
+    NAME
+HAVING 
+    COUNT(NAME) > 1;
+    
+DELETE t1 FROM uninsured_rate t1
+        INNER JOIN
+    uninsured_rate t2 
+WHERE
+    t1.id < t2.id AND t1.NAME = t2.NAME;
+    */
